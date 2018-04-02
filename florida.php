@@ -1,57 +1,209 @@
 <?php
 
-namespace Model;
+use Model\florida;
 
-class Florida extends \Orm\Model
+
+class Controller_Florida extends Controller
 {
 
-	public function __construct($id = null)
+	
+
+	public function action_login(){
+		
+		$username = Input::post('username');
+
+		$password = Input::post('password');
+
+		$Florida = new florida();
+
+		$users = Florida::getUsers();
+		
+
+		foreach( $users as $user){ 
+			if($user['password'] === md5($password)){
+		
+				Session::set('username', $user['username']);
+
+				Response::redirect("Florida/welcome.php");
+
+			}	
+			else{
+    	       Response::redirect('Florida/loginError');
+			}
+		
+		}
+	}
+    public function action_loginError(){
+        
+        $layout = View::forge('Florida/layout');
+
+        $content = View::forge('Florida/loginError');
+		
+		$arrayComments = Florida::getComments();
+		
+       	$Florida = new florida(); 
+		
+		$attractions = Florida::getAttraction();
+
+		$layout->set_safe("attractions", $attractions); 	
+
+		$layout->content = Response::forge($content);
+
+		return $layout;
+	
+	}
+	
+	public function action_welcome(){
+        
+        $layout = View::forge('Florida/layout');
+
+        $content = View::forge('Florida/welcome');
+        
+        $layout->content = Response::forge($content);
+	
+   		$Florida = new florida();
+        
+		$attractions = Florida::getAttraction();
+        
+        $layout->set_safe("attractions", $attractions);
+	
+        $layout->content = Response::forge($content);
+
+		return $layout;
+	
+	}
+	
+      public function action_aboutus(){
+        
+        $layout = View::forge('Florida/layout');
+
+        $content = View::forge('Florida/aboutus');
+	   
+		$layout->content = Response::forge($content);
+
+		$Florida = new florida();
+        
+		$attractions = Florida::getAttraction();
+        
+        $layout->set_safe("attractions", $attractions);
+	       
+        $layout->content = Response::forge($content);
+
+		return $layout;
+	
+    }
+  
+	
+  	
+	public function action_adminPage(){
+        
+        $layout = View::forge('Florida/layout');
+
+        $content = View::forge('Florida/adminPage');
+        $arrayComments = Florida::getComments();
+		
+        $layout->content = Response::forge($content);
+
+		return $layout;
+	
+	}
+
+	
+	
+	public function action_attraction($attractionID){
+        
+		$layout = View::forge('Florida/layout');
+
+        $content = View::forge('Florida/attraction');
+        
+        $layout->content = Response::forge($content);
+
+        $Florida = new florida();
+        
+        $attractions = Florida::getAttraction();
+
+		$content->set_safe('attractionID', $attractionID);
+	
+		$layout->set_safe("attractions", $attractions);
+
+		$content->set_safe("attractions", $attractions);
+
+		$comment=Input::post("comments");
+        
+
+		if(isset($comment)){
+			Florida::inputComments($comment,$attractionID);
+			
+		}	
+       
+		$arrayComments = Florida::getComments($attractionID);
+		
+        $content->set_safe("arrayComments", $arrayComments);
+        
+        $layout->content = Response::forge($content);
+        
+
+		return $layout;
+	
+	}
+
+	public function action_deleteComment($attractionID, $commentID){
+
+		$Florida = new florida();
+
+		Florida::deleteComment($commentID);
+
+	   	Response::redirect('Florida/attraction/'.$attractionID);
+
+
+	}
+
+	public function action_updateComment($attractionID, $commentID){
+
+		$Florida = new florida();
+
+		$updatedComment = Input::post("updateComment");
+
+		if(isset($updatedComment)){
+			Florida::updateComment($commentID, $updatedComment);
+		}
+	   	Response::redirect('Florida/attraction/'.$attractionID);
+
+
+	}
+	public function action_addAttraction(){
+        
+        $layout = View::forge('Florida/layout');
+
+        $content = View::forge('Florida/addAttraction');
+        
+        $layout->content = Response::forge($content);
+
+		return $layout;
+	
+	}
+
+	public function action_logout()
 	{
-	}
-	
-	public static function getAttraction(){
-        $result = \DB::select('*')->from('attractions')->as_assoc()->execute();
-		return $result;
-	}
+		$session = Session::instance(); 
 
-	public static function getAttractionName(){
-		$result = \DB::select('attractionName')->from('attractions')->as_assoc()->execute();
-		return $result;
-	}
-	
-	public static function getAttractionDesc(){
-		$result = \DB::select('description')->from('attractions')->as_assoc()->execute();
-		return $result;
-	}
-	
-	public static function getAttractionPic(){
-		$result = \DB::select('picture')->from('attractions')->as_assoc()->execute();
-		return $result;
-	}
-	
-	public static function getAttractionID(){
-		$result = \DB::select('attractionID')->from('attractions')->as_assoc()->execute();
-		return $result;
-	}
+		$session->destroy();
 
-	public static function getComments($attractionID){
-		$result = \DB::select('*')->from('comments')->where('attractionID', $attractionID)->as_assoc()->execute();
-		return $result;
-	}
+		$layout = View::forge('Florida/layout');
 
-	public static function inputComments($comment, $attractionID){
-		$query = \DB::insert('comments');
-		$query->set(array(
-			'comment' => $comment,
-			'attractionID' => $attractionID,
-		)) -> execute();
-	}
+		$content = View::forge('Florida/welcome');
+        
+   		$Florida = new florida();
+       
+		$attractions = Florida::getAttraction();
 
-	public static function getUsers(){
-		$users = \DB::select('*')->from('users')->as_assoc()->execute();
-		return $users;
-	}
+		$layout->set_safe("attractions", $attractions); 	
 
+       	$layout->content = Response::forge($content);
+
+		return $layout;
+	}
+		
 }
-
 ?>
+
