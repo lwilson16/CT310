@@ -47,6 +47,22 @@ class Florida extends \Orm\Model
 		)) -> execute();
 	}
 
+	public static function deleteComment($commentID){
+		$query = \DB::delete('comments');
+		$query->where('commentID',$commentID) -> execute();
+
+	}
+
+	public static function updateComment($commentID, $updatedComment){
+		$query = \DB::update('comments');
+		$query->set(array(
+			'comment' => $updatedComment,
+			
+		));
+		$query->where('commentID',$commentID) -> execute();
+
+	}
+
 	public static function getUsers(){
 		$users = \DB::select('*')->from('users')->as_assoc()->execute();
 		return $users;
