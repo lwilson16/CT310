@@ -28,8 +28,7 @@
         <h3> Comment if you dare! </h3>
             <?php 
 				session_start();
-				echo Session::get('username');
-                if(Session::get('username')){ 
+                if(Session::get('username') === "kenny" || Session::get('username') === "lwilson1"){ 
             ?>
                     <form method="POST">
                     <div>
@@ -43,11 +42,22 @@
                 <section id="comment">
 				 
 				<?php
-					foreach($arrayComments as $comment){
-						if($comment['attractionID'] === $attractionID)
-							echo $comment['comment'];
-						 ?> <br>
-				<?php } ?>
+				foreach($arrayComments as $comment){
+					if($comment['attractionID'] === $attractionID){
+						echo $comment['comment'] .$comment['commentID'];
+							
+				}		?> 
+				<br>		
+				<?php if(Session::get('username') === "kenny" || Session::get('username') === "lwilson1"){ ?>	
+						<a  href="<?php echo Uri::create('Florida/deleteComment/'.$comment['attractionID'].'/'.$comment['commentID']); ?>"><input type="button" name="deleteComment" value="delete" id="deleteComment"> </a> 
+				
+						<form method="POST" action="<?php echo Uri::create('Florida/updateComment/'.$comment['attractionID'].'/'.$comment['commentID']); ?>">
+        	        		<textarea rows="1" cols="20" name="updateComment" id="updateComment"></textarea>
+							<input type="submit" value="edit"></a>
+						</form>
+				
+				<?php 	}	
+				} ?>
             </p>
         </session>
 	</div>

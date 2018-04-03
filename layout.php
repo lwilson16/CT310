@@ -16,16 +16,18 @@
 	<nav class="navbar navbar-fixed-top">
 		<div class="container-fluid"> 
 			<ul class="nav navbar-nav navbar-justified">
+				<li> <a href=<?=Uri::create("Florida/welcome.php"); ?> >Home</a></li>
 				<?php foreach($attractions as $attr){ ?> 
 				<li> <a href = <?php echo Uri::create('Florida/attraction/'.$attr['attractionID']) ?> ><?php echo $attr['attractionName'];?></a> </li> 	
 				<?php } ?>
 
-				<li><a href="aboutus.php">About Us</a></li>
-<ul class="nav navbar-nav navbar-justified">
+				<li><a href=<?=Uri::create("Florida/aboutus.php"); ?>>About Us</a></li>
+				<li> <a href=<?=Uri::create("Florida/cart.php"); ?> >Cart</a></li>
+				<ul class="nav navbar-nav navbar-justified">
 				<li class="dropdown" id="menuLogin">
 					<a class="dropdown-toggle" href="#" data-toggle="dropdown" id="navLogin">Login</a>
 					<div class="dropdown-menu" style="padding:17px;">
-<?php 
+				<?php 
 				$session = Session::instance();
 				if(strcmp("",$session->get('username'))==0){ ?>
 						<form action=<?=Uri::create("florida/login"); ?> method="POST"> 
@@ -40,14 +42,12 @@
 						<input name="password" id="password" type="password" placeholder="Password"><br>
 						<input type="submit" value="logout">
 					</form>
-			<?php } ?>
-				
+				<?php } ?>
 					</div>
-					</li>
-			 </ul>
-
+			
+				</li>
 			</ul>
-	
+			
 		</div>
 	</nav>
 
