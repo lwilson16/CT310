@@ -9,9 +9,9 @@ class Controller_Florida extends Controller
 	
 
 	public function action_login(){
-		
-		$username = Input::post('username');
 
+		$username = Input::post('username');
+			
 		$password = Input::post('password');
 
 		$Florida = new florida();
@@ -39,8 +39,6 @@ class Controller_Florida extends Controller
 
         $content = View::forge('Florida/loginError');
 		
-		$arrayComments = Florida::getComments();
-		
        	$Florida = new florida(); 
 		
 		$attractions = Florida::getAttraction();
@@ -54,8 +52,8 @@ class Controller_Florida extends Controller
 	}
 	
 	public function action_welcome(){
-        
-        $layout = View::forge('Florida/layout');
+
+	    $layout = View::forge('Florida/layout');
 
         $content = View::forge('Florida/welcome');
         
@@ -67,7 +65,8 @@ class Controller_Florida extends Controller
         
         $layout->set_safe("attractions", $attractions);
 	
-        $layout->content = Response::forge($content);
+
+		$layout->content = Response::forge($content);
 
 		return $layout;
 	
@@ -87,7 +86,8 @@ class Controller_Florida extends Controller
         
         $layout->set_safe("attractions", $attractions);
 	       
-        $layout->content = Response::forge($content);
+
+		$layout->content = Response::forge($content);
 
 		return $layout;
 	
@@ -100,7 +100,8 @@ class Controller_Florida extends Controller
         $layout = View::forge('Florida/layout');
 
         $content = View::forge('Florida/adminPage');
-        $arrayComments = Florida::getComments();
+		
+		$arrayComments = Florida::getComments();
 		
         $layout->content = Response::forge($content);
 
@@ -115,11 +116,9 @@ class Controller_Florida extends Controller
 		$layout = View::forge('Florida/layout');
 
         $content = View::forge('Florida/attraction');
-        
-        $layout->content = Response::forge($content);
-
+ 
         $Florida = new florida();
-        
+       
         $attractions = Florida::getAttraction();
 
 		$content->set_safe('attractionID', $attractionID);
@@ -127,6 +126,12 @@ class Controller_Florida extends Controller
 		$layout->set_safe("attractions", $attractions);
 
 		$content->set_safe("attractions", $attractions);
+
+		$content->set_safe("attractions", $attractions);
+
+		$layout->set_safe("guest","guest");
+
+		$content->set_safe("guest", "guest");	
 
 		$comment=Input::post("comments");
         
@@ -139,7 +144,7 @@ class Controller_Florida extends Controller
 		$arrayComments = Florida::getComments($attractionID);
 		
         $content->set_safe("arrayComments", $arrayComments);
-        
+
         $layout->content = Response::forge($content);
         
 
@@ -183,6 +188,56 @@ class Controller_Florida extends Controller
 	
 	}
 
+	public function action_addItem($attractionID, $username){
+        
+       	$Florida = new florida();
+
+		Florida::addItem($attractionID, $username);
+
+	   	Response::redirect('Florida/cart/'.$username);
+
+	}
+	
+	public function action_deleteItem($attractionID,$itemID,$username){
+
+		$Florida = new florida();
+
+		Florida::deleteItem($itemID);
+
+	   	Response::redirect('Florida/cart/'.$username);
+
+
+	}
+	public function action_cart($username){
+        
+        $layout = View::forge('Florida/layout');
+
+        $content = View::forge('Florida/cart');
+
+        $Florida = new florida();
+        
+        $attractions = Florida::getAttraction();
+
+		$cart = Florida::getCart($username);
+
+		$name = Input::post('name');
+
+		$email = Input::post('email');
+
+		$content->set_safe("cart", $cart);
+
+		$content->set_safe("attractions", $attractions);
+
+		$layout->set_safe("attractions", $attractions);
+
+
+		$layout->content = Response::forge($content);
+
+		return $layout;
+	
+	}
+
+
 	public function action_logout()
 	{
 		$session = Session::instance(); 
@@ -192,14 +247,15 @@ class Controller_Florida extends Controller
 		$layout = View::forge('Florida/layout');
 
 		$content = View::forge('Florida/welcome');
-        
-   		$Florida = new florida();
+
+		$Florida = new florida();
        
 		$attractions = Florida::getAttraction();
 
 		$layout->set_safe("attractions", $attractions); 	
-
-       	$layout->content = Response::forge($content);
+		
+		
+		$layout->content = Response::forge($content);
 
 		return $layout;
 	}
