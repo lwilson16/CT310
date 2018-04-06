@@ -1,18 +1,35 @@
+
 <html>
 <head>
-	<title>Attraction</title>
+<title><?php echo $title; ?></title>
 
 </head>
 <body>
+
+	<div class='attrPic'>	 
 	
+	<?php foreach($attractions as $attr){
+	if($attr['attractionID'] === $attractionID){ 
+?>
+
+	<img src="<?php echo "http://www.cs.colostate.edu/~lwilson1/ct310/". $attr['picture']; ?>">
+	
+<?php	}
+		}
+			?>
+
+			
+	</div>
+
+	<br>
 	<div class='attrName'>	 
-	<br><br><br>
 	
 	<?php foreach($attractions as $attr){
 		if($attr['attractionID'] === $attractionID){
-			
-			echo $attr['attractionName'];
-	?><br> <?php
+			?>
+			<h3> <?php echo $attr['attractionName']; ?> </h3>
+	<br> 
+	<?php
 			echo $attr['description'];
 		}
 	}?>

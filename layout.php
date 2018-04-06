@@ -21,9 +21,19 @@
 				<li> <a href = <?php echo Uri::create('Florida/attraction/'.$attr['attractionID']) ?> ><?php echo $attr['attractionName'];?></a> </li> 	
 				<?php } ?>
 
+				<?php
+					$session = Session::instance();
+					if($session->get('admin') == 1){
+				?>
+					<li><a href=<?=Uri::create("Florida/addAttraction.php"); ?>> +Add Attraction</a></li>
+				<?php } ?>
+				
+
+
 				<li><a href=<?=Uri::create("Florida/aboutus.php"); ?>>About Us</a></li>
 				<li> <a href=<?=Uri::create("Florida/cart.php"); ?> >Cart</a></li>
 				<ul class="nav navbar-nav navbar-justified">
+				
 				<li class="dropdown" id="menuLogin">
 					<a class="dropdown-toggle" href="#" data-toggle="dropdown" id="navLogin">Login</a>
 					<div class="dropdown-menu" style="padding:17px;">
@@ -43,6 +53,7 @@
 						<input type="submit" value="logout">
 					</form>
 				<?php } ?>
+					<a href="#"> Forgot Password </a>
 					</div>
 			
 				</li>
@@ -51,7 +62,7 @@
 		</div>
 	</nav>
 
-		<div id="mainContent">
+		<div id="mainContent" class="container text-center">
 			<?=$content; ?>
 		</div>
 		<div id="footer">
