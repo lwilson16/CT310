@@ -20,20 +20,28 @@
 				<?php foreach($attractions as $attr){ ?> 
 				<li> <a href = <?php echo Uri::create('Florida/attraction/'.$attr['attractionID']) ?> ><?php echo $attr['attractionName'];?></a> </li> 	
 				<?php } ?>
+
+				<?php
+					$session = Session::instance();
+					if($session->get('admin') == 1){
+				?>
+					<li><a href=<?=Uri::create("Florida/addAttraction.php"); ?>> +Add Attraction</a></li>
+				<?php } ?>
+				
 				<li><a href=<?=Uri::create("Florida/aboutus.php"); ?>>About Us</a></li>
 				<?php $session = Session::instance();
 					  $username=Session::get('username');
 						if(!isset($username)){
 							$username = "guest";
-						}
-				?>
+				}?>
 				<li> <a href=<?=Uri::create("Florida/cart/".$username); ?> >Cart</a></li>
 				<ul class="nav navbar-nav navbar-justified">
+				
 				<li class="dropdown" id="menuLogin">
 					<a class="dropdown-toggle" href="#" data-toggle="dropdown" id="navLogin">Login</a>
 					<div class="dropdown-menu" style="padding:17px;">
 				<?php 
-				
+				$session = Session::instance();
 				if(strcmp("",$session->get('username'))==0){ ?>
 						<form action=<?=Uri::create("florida/login"); ?> method="POST"> 
 							<input name="username" id="username" type="text" placeholder="Username"> 
@@ -43,20 +51,19 @@
 
 				<?php } else { ?>
 					<form action=<?=Uri::create("florida/logout"); ?> method="POST"> 
-						<input name="username" id="username" type="text" placeholder="Username"> 
-						<input name="password" id="password" type="password" placeholder="Password"><br>
-						<input type="submit" value="logout">
+					<input type="submit" value="logout">
 					</form>
+
 				<?php } ?>
+					<a href=<?=Uri::create("Florida/forgotPW.php"); ?> >Forgot Password?</a>
 					</div>
-			
 				</li>
 			</ul>
 			
 		</div>
 	</nav>
 
-		<div id="mainContent">
+		<div id="mainContent" >
 			<?=$content; ?>
 		</div>
 		<div id="footer">

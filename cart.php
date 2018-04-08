@@ -17,31 +17,26 @@
 		if(!isset($username)){
 			$username = "guest";
 		}
-			foreach($cart as $item){
-				foreach($attractions as $attr){
-					if($item['attractionID'] === $attr['attractionID'] && $item['username'] === $username){
-						$message += "\n" . $attr['attractionName'];
-						echo $attr['attractionName'];?>  
-						<a  href="<?php echo Uri::create('Florida/deleteItem/'.$item["attractionID"].'/'.$item['itemID']); ?>"><input type="button" name="deleteComment" value="delete" id="deleteComment"></a> 								<br>
+?>
 		<?php
-					}
-				}
-			}
-		
-		/*	foreach($cart as $item){
-				foreach($attractions as $attr){
-					if($item['attractionID'] === $attr['attractionID'])
-						echo $attr['attractionName'];
-				}
-			}*/
+			foreach($cart as $item){
+					echo $item['attractionName']; 
 		?>
+					<a  href="<?php echo Uri::create('Florida/deleteItem/'.$item['itemID'].'/'.$username); ?>"><input type="button" name="deleteComment" value="delete" id="deleteComment"></a> 								<br>
+		<?php		}	?>
 	   </p>
 
 
-		<form method="post">
+		<script>
+			function clickAlert(){
+				alert("Email has been sent.");
+			}			
+		</script>
+
+	   <form method="post" >
 		Name: 	<input type="text" name="name"><br>
-		Email:	<input type="text" name="email"><br>
-				<input type="submit" value="Request Brochure">
+		Email:	<input required type="text" name="email"><br>
+				<input type="submit" value="Request Brochure" onclick="clickAlert()" >
 
 		</form>
 
